@@ -32,40 +32,24 @@ std::string convert_snake_to_camel(std::string line) {
     return line;
 }
 
-void help_message() {
-    std::cout << "Usage: snake2camel [options] files..\n";
-    std::cout << "General Options:\n";
-    std::cout << "\t-o\tOverwrite the file. Default is filename_camel.\n";
-}
-
-std::string get_new_filename(char *name, bool overwrite) {
+std::string get_new_filename(std::string& filename,  bool overwrite){
     if (overwrite) {
-        return name;
+        return filename;
     }
-    std::string new_name = std::string(name);
+    std::string new_name = std::string(filename);
     new_name.insert(new_name.find_last_of("."), "_cameled");
-    return new_name;
+    const std::string text = "";
+    return text;
 }
 
-int main(int argc, char *argv[]) {
-    if (argc < 2) {
-        help_message();
-        return -1;
+void openFile(const std::string& filename, const bool overWrite){
+    std::ifstream in_file(filename);
+    std::ostringstream output_buffer;
+    std::string line;
+    while (std::getline(in_file, line)) {
+        output_buffer << convert_snake_to_camel(line) << '\n';
     }
-    bool overwrite = 0;
-    for (int i = 1; i < argc; ++i) {
-        if (strcmp(argv[i], "-o") == 0) {
-            overwrite = 1;
-        } else {
-            std::ifstream in_file(argv[i]);
-            std::ostringstream output_buffer;
-            std::string line;
-            while (std::getline(in_file, line)) {
-                output_buffer << convert_snake_to_camel(line) << '\n';
-            }
-            in_file.close();
-            std::ofstream out_file(get_new_filename(argv[i], overwrite));
-            out_file << output_buffer.str();
-        }
-    }
+    in_file.close();
+    std::ofstream out_file(get_new_filename(filename, overWrite));
+    out_file << output_buffer.str();
 }
