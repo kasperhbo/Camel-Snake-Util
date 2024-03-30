@@ -4,11 +4,24 @@
 
 #include "Application.h"
 #include <HBUI/HBUI.h>
+#include "Certificates/CertificateGenerator.h"
+#include "Certificates/Windows/CertificateGeneratorWindow.h"
+#include <iostream>
+
+
 
 namespace HBUI::Utils::CamelSnake {
     Application::Application() {
-        HBUI::initialize("Hello, World!", 1280, 720);
 
+
+
+
+        HBUI::addDefaultIcon("NF_ICON_snake", NF_ICON_snake);
+        HBUI::addDefaultIcon("NF_ICON_certificate1", NF_ICON_certificate1);
+        HBUI::initialize("Hello, World!", 1280, 720);
+        auto* ww= new HBUI::Utils::Certificates::CertificateGeneratorWindow();
+        ww->show();
+        delete ww;
         run();
     }
 
@@ -23,6 +36,10 @@ namespace HBUI::Utils::CamelSnake {
         HBUI::startFrame();
         HBUI::beginTaskBar("HorizontalTaskBar", {0, 0});
         HBUI::iconButton(HBUI::getIcon("NF_ICON_snake"));
+        auto btn = HBUI::iconButton(HBUI::getIcon("NF_ICON_certificate1"));
+        if (btn == HBButtonState_Clicked) {
+            std::cout << "Hovered" << std::endl;
+        }
         HBUI::endTaskBar();
         ImGui::ShowDemoWindow(nullptr);
 
