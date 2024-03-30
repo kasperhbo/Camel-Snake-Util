@@ -4,7 +4,7 @@
 
 #include "CertificateGenerator.h"
 
-namespace HBUI {
+namespace HB {
     namespace Utils {
         namespace Certificates {
         } // Certificates

@@ -5,7 +5,7 @@
 #ifndef CAMELSNAKEUTIL_CERTIFICATEGENERATOR_H
 #define CAMELSNAKEUTIL_CERTIFICATEGENERATOR_H
 
-namespace HBUI {
+namespace HB {
     namespace Utils {
         namespace Certificates {
 

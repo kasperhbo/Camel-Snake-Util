@@ -4,13 +4,12 @@
 
 #include "Application.h"
 #include <HBUI/HBUI.h>
-#include "Certificates/CertificateGenerator.h"
 #include "Certificates/Windows/CertificateGeneratorWindow.h"
 #include <iostream>
 
 
 
-namespace HBUI::Utils::CamelSnake {
+namespace HB::Utils {
     Application::Application() {
 
 

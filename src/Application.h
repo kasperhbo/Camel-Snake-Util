@@ -7,7 +7,7 @@
 
 #include <HBUI/HBUI.h>
 
-namespace HBUI::Utils::CamelSnake {
+namespace HB::Utils {
 
     class Application {
     public:
