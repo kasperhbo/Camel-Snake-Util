@@ -29,6 +29,8 @@ add_executable(${CMAKE_PROJECT_NAME}
         src/Opcua/Server.h
         src/Opcua/ServerManagerWindow.cpp
         src/Opcua/ServerManagerWindow.h
+        src/Opcua/NodeWindow.cpp
+        src/Opcua/NodeWindow.h
 )
 
 ######################################

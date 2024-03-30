@@ -7,7 +7,7 @@
 
 #include <HBUI/HBUI.h>
 
-
+#include "Opcua/ServerManagerWindow.h"
 namespace HB::Utils {
 
     class Application {
@@ -19,6 +19,10 @@ namespace HB::Utils {
         void render();
 
         void startOpcuaServer();
+
+
+    private:
+        HBUI::Utils::Opcua::ServerManagerWindow serverManagerWindow;
     };
 
 } // CamelSnake

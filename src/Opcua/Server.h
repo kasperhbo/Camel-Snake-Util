@@ -18,28 +18,34 @@ namespace HB::Utils::Opcua {
     };
 
     struct Node {
-        std::string name;
         std::string displayName;
-        std::string description;
+        std::string browserName;
+        std::string nodeId;
 
         std::variant<int, bool, std::string> defaultValue;
         std::vector<Node *> childNodes = {};
         NodeType type = NodeType::OBJECT;
 
+        Node(std::string displayName, std::string browserName, std::string nodeId, NodeType type)
+            : displayName(std::move(displayName)), browserName(std::move(browserName)), nodeId(std::move(nodeId)), type(type) {}
 
-        Node(std::string name, std::string displayName, std::string description,
-             NodeType type) : Node(std::move(name), std::move(displayName), std::move(description),
-                                   std::variant<int, bool, std::string>{}, {}, type) {
+        Node(std::string displayName, std::string browserName, std::string nodeId,  std::variant<int, bool, std::string> defaultValue)
+                : displayName(std::move(displayName)), browserName(std::move(browserName)), nodeId(std::move(nodeId)), type(NodeType::VARIABLE), defaultValue(std::move(defaultValue)) {}
 
-        }
-
-
-        Node(std::string name, std::string displayName, std::string description,
+        Node(std::string displayName, std::string browserName, std::string nodeId,
              const std::variant<int, bool, std::string> &defaultValue, const std::vector<Node *> &childNodes,
              NodeType type
-        ) : name(std::move(name)), displayName(std::move(displayName)),
-            description(std::move(description)),
+        ) : displayName(std::move(displayName)), browserName(std::move(browserName)),
+            nodeId(std::move(nodeId)),
             defaultValue(defaultValue), childNodes(childNodes), type(type) {}
+
+
+        Node(std::string displayName, std::string browserName, std::string nodeId,
+             const std::variant<int, bool, std::string> &defaultValue, NodeType type
+        ) : displayName(std::move(displayName)), browserName(std::move(browserName)),
+            nodeId(std::move(nodeId)),
+            defaultValue(defaultValue), type(type) {}
+
 
         void addNode(Node *node) {
             this->childNodes.emplace_back(node);
@@ -68,51 +74,31 @@ namespace HB::Utils::Opcua {
 
     class Server {
     public:
-        Server(const std::string &hostname, int port);
+        Server() : Server("", 4840) {}
+
+        Server(const std::string &hostname, int port) : Server(hostname, port, {}) {}
+
+        Server(const std::string &mHostname, int mPort, const std::vector<Node *> &mNodes);
 
         ~Server();
 
-        [[maybe_unused]]void startServer() {
-            if (p_Server != nullptr) {
-                if (p_Server->isRunning()) {
-                    std::cout << "Server is already running" << std::endl;
-                    return;
-                } else {
-                    delete p_Server;
-                }
-            }
-
-            p_Server = new opcua::Server(m_Port);
-
-            if (!m_Hostname.empty()) {
-                p_Server->setCustomHostname(m_Hostname);//else use the pc's hostname
-            }
-
-            p_Server->setApplicationUri("opcua:open62541pp.server.application");
-            p_Server->setProductUri("https://open62541pp.github.io");
-
-            opcua::Node<opcua::Server> parentNode = p_Server->getObjectsNode();
-            for (auto &node: m_Nodes) {
-                addNodeToServer(*node, parentNode);
-            }
-
-            p_Server->run();
-        }
-
+    public:
         void addNode(Node *node) {
             m_Nodes.emplace_back(node);
         }
 
-        [[nodiscard]] std::string getHostname() const {
-            return m_Hostname;
-        }
+        void startServer();
 
-        [[nodiscard]] int getPort() const {
-            return m_Port;
+        void stopServer();
+
+    public:
+        std::vector<Node *> getNodes() {
+            return m_Nodes;
         }
 
     private:
         void addNodeToServer(const Node &node, opcua::Node<opcua::Server> &parentNode);
+
 
     private:
         std::string m_Hostname = "";
@@ -121,6 +107,12 @@ namespace HB::Utils::Opcua {
     private:
         opcua::Server *p_Server = nullptr;
         std::vector<Node *> m_Nodes = {};
+
+        std::mutex m_Mutex;             // Mutex to protect shared resources
+        std::condition_variable m_Cond; // Condition variable for synchronization
+        std::thread m_ServerThread;     // Thread object for the server
+        std::atomic<bool> m_RunServer;  // Flag to control the server's running state
+        void serverThreadFunction();
     };
 
 } // Opcua
