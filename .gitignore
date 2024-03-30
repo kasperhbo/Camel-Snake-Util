@@ -1,4 +1,4 @@
+/vendor/glfw/
 /vendor/glfw/*
-/vendor/*
 /cmake-build-debug/
 .idea

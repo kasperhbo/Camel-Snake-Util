@@ -2,3 +2,6 @@
 	path = vendor/imgui
 	url = git@github.com:KaspersTools/imgui.git
     branch = feature/MainUIElements
+[submodule "vendor/open62541pp"]
+	path = vendor/open62541pp
+	url = https://github.com/open62541pp/open62541pp.git

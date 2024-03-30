@@ -7,14 +7,18 @@
 
 #include <HBUI/HBUI.h>
 
+
 namespace HB::Utils {
 
     class Application {
     public:
         Application();
+        ~Application() = default;
     private:
         void run();
         void render();
+
+        void startOpcuaServer();
     };
 
 } // CamelSnake
