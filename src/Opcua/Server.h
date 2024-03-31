@@ -51,18 +51,18 @@ namespace HB::Utils::Opcua {
             this->childNodes.emplace_back(node);
         }
 
-        [[nodiscard]]opcua::DataTypeId getDataType() const {
+        [[nodiscard]]int getDataType() const {
 
             switch (defaultValue.index()) {
                 case 0:
-                    return opcua::DataTypeId::Int32;
+                    return UA_TYPES_INT32;
                 case 1:
-                    return opcua::DataTypeId::Boolean;
+                    return UA_TYPES_BOOLEAN;
                 case 2:
-                    return opcua::DataTypeId::String;
+                    return UA_TYPES_STRING;
             }
             assert(!defaultValue.index() && "Value type is not set");
-            return opcua::DataTypeId::Int32;
+            return UA_TYPES_VARIANT;
         }
 
         ~Node() {
@@ -81,6 +81,14 @@ namespace HB::Utils::Opcua {
         Server(const std::string &mHostname, int mPort, const std::vector<Node *> &mNodes);
 
         ~Server();
+
+        bool isRunning();
+
+        int getPort() const;
+
+        u_long getConnectedClientCount() const;
+
+        std::string getHostname();
 
     public:
         void addNode(Node *node) {

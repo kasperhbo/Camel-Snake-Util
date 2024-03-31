@@ -8,89 +8,92 @@
 namespace HBUI {
     namespace Utils {
         namespace Opcua {
+            void drawNodeData(TreeNode &node) {
+                ImGui::TableNextColumn();
+                ImGui::TextUnformatted(node.path.c_str());
+                ImGui::TableNextColumn();
+                ImGui::TextUnformatted(node.value.c_str());
+                ImGui::TableNextColumn();
+            }
             // A struct to represent a leaf or a node
-            struct TreeNode {
-                std::string name; // Display name of the node/leaf
-                std::string path; // The hierarchical path or identifier
-                std::string value; // The value if this is a leaf
-                bool isSelected; // Whether this item is selected
-                std::vector<TreeNode> children; // Children of this node/leaf
+            void ServerManagerWindow::DrawTreeNode(TreeNode &node) {
 
-                // Constructor for a node
-                TreeNode() : name(""), path(""), value(""), isSelected(false) {}
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
 
-                TreeNode(const std::string &nodeName, const std::string &nodePath)
-                        : name(nodeName), path(nodePath), value(""), isSelected(false) {}
-
-                // Constructor for a leaf
-                TreeNode(const std::string &leafName, const std::string &leafPath, const std::string &leafValue)
-                        : name(leafName), path(leafPath), value(leafValue), isSelected(false) {}
-
-                // Function to determine if this is a leaf (has value)
-                bool isLeaf() const {
-                    return !value.empty();
-                }
-
-                // Function to add a child node
-                void addChild(const TreeNode &child) {
-                    children.push_back(child);
-                }
-            };
-
-
-// Recursively draw the tree
-            void DrawTreeNode(TreeNode &node) {
                 if (node.isLeaf() && node.children.empty()) {
                     // It's a leaf node
-                    ImGui::Selectable(node.name.c_str(), &node.isSelected);
-                    ImGui::NextColumn();
-                    ImGui::TextUnformatted(node.path.c_str());
-                    ImGui::NextColumn();
-                    ImGui::TextUnformatted(node.value.c_str());
-                    ImGui::NextColumn();
+                    if (ImGui::Selectable(node.name.c_str(), node.isSelected, ImGuiSelectableFlags_SpanAllColumns)) {
+                        node.isSelected = true;
+                        p_SelectedNode = node.node;
+                    }
+                    drawNodeData(node);
                 } else {
                     // It's a parent node
-                    if (ImGui::TreeNode(node.name.c_str())) {
-                        ImGui::NextColumn();
-                        ImGui::TextUnformatted(node.path.c_str());
-                        ImGui::NextColumn();
-                        ImGui::TextUnformatted(node.value.c_str());
-                        ImGui::NextColumn();
+                    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
+                                                | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_SpanAllColumns;
+                    if(p_SelectedNode == node.node) {
+                        flags |= ImGuiTreeNodeFlags_Selected;
+                    }
+
+                    bool node_open = ImGui::TreeNodeEx(node.name.c_str(), flags);
+                    if (ImGui::IsItemClicked()) {
+                        node.isSelected = true;
+                        p_SelectedNode = node.node;
+                    }
+                    if (node_open) {
+                        drawNodeData(node);
                         for (auto &child: node.children) {
                             DrawTreeNode(child);
                         }
                         ImGui::TreePop();
                     } else {
-                        ImGui::NextColumn();
-                        ImGui::NextColumn();
-                        ImGui::NextColumn();
+                        // The node is collapsed, but you can still draw other relevant data here
+                        // This is optional, depending on your use case
+                        drawNodeData(node);
                     }
+//                    if (ImGui::TreeNodeEx(node.name.c_str(),flags)) {
+//                        if (ImGui::IsItemClicked())
+//                        {
+//                            node.isSelected = true;
+//                            p_SelectedNode = node.node;
+//                        }
+//                        drawNodeData(node);
+//                        for (auto &child: node.children) {
+//                            DrawTreeNode(child);
+//                        }
+//                        ImGui::TreePop();
+//                    } else {
+//                        drawNodeData(node);
+//                    }
                 }
             }
 
-
             // Main function to create the tree view
-            void MyComplexTree(TreeNode nodes) {
-                // Set headers for columns
-                ImGui::Columns(3, "mycolumns"); // 3 columns
-                ImGui::Text("Name");
-                ImGui::NextColumn();
-                ImGui::Text("Path");
-                ImGui::NextColumn();
-                ImGui::Text("Value");
-                ImGui::NextColumn();
+            void ServerManagerWindow::MyComplexTree(TreeNode nodes) {
 
-                DrawTreeNode(nodes);
+                if (ImGui::BeginTable("table", 3,
+                                      ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY |
+                                      ImGuiTableFlags_ScrollX)) {
+                    ImGui::TableSetupColumn("Name");
+                    ImGui::TableSetupColumn("Path");
+                    ImGui::TableSetupColumn("Value");
+                    ImGui::TableHeadersRow();
+
+                    DrawTreeNode(nodes);
+                    ImGui::EndTable();
+                }
             }
 
-            TreeNode CreateTreeNodeFromServerNode(HB::Utils::Opcua::Node &serverNode) {
+            TreeNode ServerManagerWindow::CreateTreeNodeFromServerNode(HB::Utils::Opcua::Node &serverNode) {
                 TreeNode rootNode;
                 rootNode.name = serverNode.displayName;
-                rootNode.path = serverNode.nodeId   ;
+                rootNode.path = serverNode.nodeId;
                 rootNode.value =
                         serverNode.defaultValue.index() == 0 ? std::to_string(std::get<int>(serverNode.defaultValue)) :
                         serverNode.defaultValue.index() == 1 ? std::to_string(std::get<bool>(serverNode.defaultValue)) :
                         std::get<std::string>(serverNode.defaultValue);
+                rootNode.node = &serverNode;
 
                 rootNode.isSelected = false;
 
@@ -104,6 +107,58 @@ namespace HBUI {
 
             ServerManagerWindow::ServerManagerWindow() {
                 p_Server = new HB::Utils::Opcua::Server();
+                std::vector<HB::Utils::Opcua::Node *> m_Nodes;
+                HB::Utils::Opcua::Node *root = new HB::Utils::Opcua::Node("DatablocksGlobal", "DatablocksGlobal",
+                                                                          "DatablocksGlobal",
+                                                                          HB::Utils::Opcua::NodeType::OBJECT);
+                m_Nodes.push_back(root);
+
+                HB::Utils::Opcua::Node *oeeEnAnalyseDataNode = new HB::Utils::Opcua::Node("OEEenAnalyseData",
+                                                                                          "OEEenAnalyseData",
+                                                                                          "OEEenAnalyseData",
+                                                                                          HB::Utils::Opcua::NodeType::OBJECT);
+                root->addNode(oeeEnAnalyseDataNode);
+
+                HB::Utils::Opcua::Node *u4BatchactiveNode = new HB::Utils::Opcua::Node("U4.bBatchactive",
+                                                                                       "U4.bBatchactive",
+                                                                                       "OEEenAnalyseData.U4.bBatchactive",
+                                                                                       false);
+                oeeEnAnalyseDataNode->addNode(u4BatchactiveNode);
+
+                HB::Utils::Opcua::Node *u4DelayedAutoNode = new HB::Utils::Opcua::Node("U4.bDelayedAuto",
+                                                                                       "U4.bDelayedAuto",
+                                                                                       "OEEenAnalyseData.U4.bDelayedAuto",
+                                                                                       false);
+                oeeEnAnalyseDataNode->addNode(u4DelayedAutoNode);
+
+                HB::Utils::Opcua::Node *u4bInCycleStopNode = new HB::Utils::Opcua::Node("U4.bInCycleStop",
+                                                                                        "U4.bInCycleStop",
+                                                                                        "'OEEenAnalyseData'.U4.bInCycleStop",
+                                                                                        false);
+                oeeEnAnalyseDataNode->addNode(u4bInCycleStopNode);
+
+                HB::Utils::Opcua::Node *u4bInStopNode = new HB::Utils::Opcua::Node("U4.bInStop", "U4.bInStop",
+                                                                                   "OEEenAnalyseData.U4.bInStop",
+                                                                                   false);
+                oeeEnAnalyseDataNode->addNode(u4bInStopNode);
+
+                HB::Utils::Opcua::Node *u4ResetNecessaryNode = new HB::Utils::Opcua::Node("U4.bResetNecessary",
+                                                                                          "U4.bResetNecessary",
+                                                                                          "OEEenAnalyseData.U4.bResetNecessary",
+                                                                                          false);
+                oeeEnAnalyseDataNode->addNode(u4ResetNecessaryNode);
+
+                HB::Utils::Opcua::Node *iTargetQuantityNode = new HB::Utils::Opcua::Node("iTargetQuantity",
+                                                                                         "iTargetQuantity",
+                                                                                         "OEEenAnalyseData.iTargetQuantity",
+                                                                                         0);
+                oeeEnAnalyseDataNode->addNode(iTargetQuantityNode);
+
+                HB::Utils::Opcua::Node *sWorkOrderIdNode = new HB::Utils::Opcua::Node("sWorkOrderId", "sWorkOrderId",
+                                                                                      "OEEenAnalyseData.sWorkOrderId",
+                                                                                      "Unset");
+                oeeEnAnalyseDataNode->addNode(sWorkOrderIdNode);
+
             }
 
             void ServerManagerWindow::begin() {
@@ -135,24 +190,26 @@ namespace HBUI {
                                   ImVec2(0, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
                 {
                     // Top Bar
-                    ImGui::Text("Server IP: %s", "localhost");
-
                     ImGui::Columns(2, "Server Info"); // 2-ways split
+                    ImGui::Text("Hostname: ");
+                    ImGui::NextColumn();
+                    ImGui::InputText("##Hostname", const_cast<char *>(p_Server->getHostname().c_str()), 256);
+                    ImGui::NextColumn();
                     ImGui::Text(" Status: ");
                     ImGui::NextColumn();
-                    ImGui::Text("Running");
+                    ImGui::Text(p_Server->isRunning() ? "Running" : "Stopped");
                     ImGui::NextColumn();
                     ImGui::Text(" Port:");
                     ImGui::NextColumn();
-                    ImGui::Text("4840");
+                    ImGui::Text("%d", p_Server->getPort());
                     ImGui::NextColumn();
                     ImGui::Text(" Nodes:");
                     ImGui::NextColumn();
-                    ImGui::Text("0");
+                    ImGui::Text("%zu", p_Server->getNodes().size());
                     ImGui::NextColumn();
                     ImGui::Text(" Clients:");
                     ImGui::NextColumn();
-                    ImGui::Text("0");
+                    ImGui::Text("%lu", p_Server->getConnectedClientCount());
                     ImGui::NextColumn();
                     ImGui::Text(" Uptime:");
                     ImGui::NextColumn();
@@ -185,6 +242,31 @@ namespace HBUI {
 
                 ImGui::BeginChild("NodeProperties", ImVec2(0, 0), true);
                 ImGui::Text("Node Properties");
+                if (p_SelectedNode != nullptr) {
+                    ImGui::Text("Name: %s", p_SelectedNode->displayName.c_str());
+                    ImGui::Text("Path: %s", p_SelectedNode->nodeId.c_str());
+                    switch (p_SelectedNode->getDataType()) {
+                        case UA_TYPES_INT32:
+                            if(ImGui::InputInt("Value", &std::get<int>(p_SelectedNode->defaultValue))){
+                                std::cout << "Int changed" << std::endl;
+                                p_SelectedNode->defaultValue = std::get<int>(p_SelectedNode->defaultValue);
+                            }
+                            break;
+                        case UA_TYPES_BOOLEAN:
+
+                            if(ImGui::Checkbox("Value", &std::get<bool>(p_SelectedNode->defaultValue))){
+                                std::cout << "Checkbox changed" << std::endl;
+                            }
+                            break;
+                        case UA_TYPES_STRING:
+                            char buffer[256];
+                            strcpy(buffer, std::get<std::string>(p_SelectedNode->defaultValue).c_str());
+                            ImGui::InputText("Value", buffer, 256);
+                            p_SelectedNode->defaultValue = std::string(buffer);
+                            break;
+
+                    }
+                }
 
                 ImGui::EndChild();
 
@@ -207,6 +289,13 @@ namespace HBUI {
 
             void ServerManagerWindow::startServer() {
                 p_Server->startServer();
+//                for (auto &node: p_Server->getNodes()) {
+//                    delete node;
+//                }
+//                p_Server->getNodes().clear();
+//                for (auto &node: p_Server->getNodes()) {
+//                    delete node;
+//                }
             }
 
             void ServerManagerWindow::stopServer() {

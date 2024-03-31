@@ -7,159 +7,67 @@
 #define OPCUA_LOCALE "en-US"
 
 namespace HB::Utils::Opcua {
+
+    std::string UAStringToString(const UA_String& uaString) {
+        // Check if the UA_String is valid
+        if (uaString.data == nullptr || uaString.length == 0) {
+            return std::string(); // Return an empty string if UA_String is invalid or empty
+        }
+
+        // Construct an std::string from the data and length of UA_String
+        return std::string(reinterpret_cast<char*>(uaString.data), uaString.length);
+    }
+
     Server::Server(const std::string &mHostname, int mPort, const std::vector<Node *> &mNodes)
             : m_Hostname(mHostname), m_Port(mPort),
               p_Server(nullptr),
               m_Nodes(mNodes), m_Mutex(), m_Cond(),
               m_ServerThread(), m_RunServer() {
-        HB::Utils::Opcua::Node *root = new HB::Utils::Opcua::Node("DatablocksGlobal", "DatablocksGlobal", "DatablocksGlobal",
-                                                NodeType::OBJECT);
+        HB::Utils::Opcua::Node *root = new HB::Utils::Opcua::Node("DatablocksGlobal", "DatablocksGlobal",
+                                                                  "DatablocksGlobal",
+                                                                  NodeType::OBJECT);
         m_Nodes.push_back(root);
 
-
-//        auto oeeEnAnalyseDataNode = root->addNode(
-//                {1, "OEEenAnalyseData"},
-//                "OEEenAnalyseData",
-//                opcua::ObjectAttributes{}
-//                        .setDisplayName({"en-US", "OEEenAnalyseData"})
-//                        .setDescription({"en-US", "OEEenAnalyseData"})
-//        );
-//
-//        auto generalBatchactiveNode = oeeEnAnalyseDataNode.addVariable(
-//                {1, "General.bBatchActive"},
-//                "General.bBatchactive",
-//                opcua::VariableAttributes{}
-//                        .setDisplayName({"en-US", "General.bBatchActive"})
-//                        .setDescription({"en-US", "General.bBatchActive"})
-//                        .setDataType<UA_Boolean>()
-//        );  // This might need to be changed based on the type converter
-//        generalBatchactiveNode.writeValueScalar(false);
-//        generalBatchactiveNode.writeAccessLevel(
-//                opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite
-//        );
-
-//        opcua::Node<opcua::Server> u4BatchactiveNode = oeeEnAnalyseDataNode.addVariable(
-//                {1, "U4.bBatchactive"},
-//                "U4.bBatchactive",
-//                opcua::VariableAttributes{}
-//                        .setDisplayName({"en-US", "U4.bBatchactive"})
-//                        .setDescription({"en-US", "U4.bBatchactive"})
-//                        .setDataType<UA_Boolean>()
-//        );
-//        u4BatchactiveNode.writeValueScalar(false);
-//        u4BatchactiveNode.writeAccessLevel(
-//                opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite
-//        );
-//
-//        auto u4DelayedAutoNode = oeeEnAnalyseDataNode.addVariable(
-//                {1, "U4.bDelayedAuto"},
-//                "U4.bDelayedAuto",
-//                opcua::VariableAttributes{}
-//                        .setDisplayName({"en-US", "U4.bDelayedAuto"})
-//                        .setDescription({"en-US", "U4.bDelayedAuto"})
-//                        .setDataType<UA_Boolean>()
-//        );
-//
-//        u4DelayedAutoNode.writeValueScalar(false);
-//        u4DelayedAutoNode.writeAccessLevel(
-//                opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite
-//        );
-//
-//        auto u4bInCycleStopNode = oeeEnAnalyseDataNode.addVariable(
-//                {1, "U4.bInCycleStop"},
-//                "U4.bInCycleStop",
-//                opcua::VariableAttributes{}
-//                        .setDisplayName({"en-US", "U4.bInCycleStop"})
-//                        .setDescription({"en-US", "U4.bInCycleStop"})
-//                        .setDataType<UA_Boolean>()
-//        );
-//
-//        u4bInCycleStopNode.writeValueScalar(false);
-//        u4bInCycleStopNode.writeAccessLevel(
-//                opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite
-//        );
-//
-//        auto u4bInStopNode = oeeEnAnalyseDataNode.addVariable(
-//                {1, "U4.bInStop"},
-//                "U4.bInStop",
-//                opcua::VariableAttributes{}
-//                        .setDisplayName({"en-US", "U4.bInStop"})
-//                        .setDescription({"en-US", "U4.bInStop"})
-//                        .setDataType<UA_Boolean>()
-//        );
-//
-//        u4bInStopNode.writeValueScalar(false);
-//        u4bInStopNode.writeAccessLevel(
-//                opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite
-//        );
-//
-//        auto u4ResetNecessaryNode = oeeEnAnalyseDataNode.addVariable(
-//                {1, "U4.bResetNecessary"},
-//                "U4.bResetNecessary",
-//                opcua::VariableAttributes{}
-//                        .setDisplayName({"en-US", "U4.bResetNecessary"})
-//                        .setDescription({"en-US", "U4.bResetNecessary"})
-//                        .setDataType<UA_Boolean>()
-//        );
-//
-//        u4ResetNecessaryNode.writeValueScalar(false);
-//        u4ResetNecessaryNode.writeAccessLevel(
-//                opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite
-//        );
-//
-//        auto iTargetQuantityNode = oeeEnAnalyseDataNode.addVariable(
-//                {1, "iTargetQuantity"},
-//                "iTargetQuantity",
-//                opcua::VariableAttributes{}
-//                        .setDisplayName({"en-US", "iTargetQuantity"})
-//                        .setDescription({"en-US", "iTargetQuantity"})
-//                        .setDataType<int>()
-//        );
-//
-//        iTargetQuantityNode.writeValueScalar(0);
-//        iTargetQuantityNode.writeAccessLevel(
-//                opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite
-//        );
-//
-//        opcua::Node sWorkOrderIdNode = oeeEnAnalyseDataNode.addVariable(
-//                {1, "sWorkOrderId"},
-//                "sWorkOrderId",
-//                opcua::VariableAttributes{}
-//                        .setDisplayName({"en-US", "Work Order ID"})
-//                        .setDescription({"en-US", "The identifier for the work order"})
-//                        .setDataType<opcua::String>() // This might need to be changed based on the type converter
-//        );
-
-        HB::Utils::Opcua::Node *oeeEnAnalyseDataNode = new HB::Utils::Opcua::Node("OEEenAnalyseData", "OEEenAnalyseData", "OEEenAnalyseData",
-                                                NodeType::OBJECT);
+        HB::Utils::Opcua::Node *oeeEnAnalyseDataNode = new HB::Utils::Opcua::Node("OEEenAnalyseData",
+                                                                                  "OEEenAnalyseData",
+                                                                                  "OEEenAnalyseData",
+                                                                                  NodeType::OBJECT);
         root->addNode(oeeEnAnalyseDataNode);
 
-        HB::Utils::Opcua::Node *u4BatchactiveNode = new HB::Utils::Opcua::Node("U4.bBatchactive", "U4.bBatchactive", "OEEenAnalyseData.U4.bBatchactive",
-                                                false);
+        HB::Utils::Opcua::Node *u4BatchactiveNode = new HB::Utils::Opcua::Node("U4.bBatchactive", "U4.bBatchactive",
+                                                                               "OEEenAnalyseData.U4.bBatchactive",
+                                                                               false);
         oeeEnAnalyseDataNode->addNode(u4BatchactiveNode);
 
-        HB::Utils::Opcua::Node *u4DelayedAutoNode = new HB::Utils::Opcua::Node("U4.bDelayedAuto", "U4.bDelayedAuto", "OEEenAnalyseData.U4.bDelayedAuto",
-                                                false);
+        HB::Utils::Opcua::Node *u4DelayedAutoNode = new HB::Utils::Opcua::Node("U4.bDelayedAuto", "U4.bDelayedAuto",
+                                                                               "OEEenAnalyseData.U4.bDelayedAuto",
+                                                                               false);
         oeeEnAnalyseDataNode->addNode(u4DelayedAutoNode);
 
-        HB::Utils::Opcua::Node *u4bInCycleStopNode = new HB::Utils::Opcua::Node("U4.bInCycleStop", "U4.bInCycleStop", "'OEEenAnalyseData'.U4.bInCycleStop",
-                                                false);
+        HB::Utils::Opcua::Node *u4bInCycleStopNode = new HB::Utils::Opcua::Node("U4.bInCycleStop", "U4.bInCycleStop",
+                                                                                "'OEEenAnalyseData'.U4.bInCycleStop",
+                                                                                false);
         oeeEnAnalyseDataNode->addNode(u4bInCycleStopNode);
 
-        HB::Utils::Opcua::Node *u4bInStopNode = new HB::Utils::Opcua::Node("U4.bInStop", "U4.bInStop", "OEEenAnalyseData.U4.bInStop",
-                                                false);
+        HB::Utils::Opcua::Node *u4bInStopNode = new HB::Utils::Opcua::Node("U4.bInStop", "U4.bInStop",
+                                                                           "OEEenAnalyseData.U4.bInStop",
+                                                                           false);
         oeeEnAnalyseDataNode->addNode(u4bInStopNode);
 
-        HB::Utils::Opcua::Node *u4ResetNecessaryNode = new HB::Utils::Opcua::Node("U4.bResetNecessary", "U4.bResetNecessary", "OEEenAnalyseData.U4.bResetNecessary",
-                                                false);
+        HB::Utils::Opcua::Node *u4ResetNecessaryNode = new HB::Utils::Opcua::Node("U4.bResetNecessary",
+                                                                                  "U4.bResetNecessary",
+                                                                                  "OEEenAnalyseData.U4.bResetNecessary",
+                                                                                  false);
         oeeEnAnalyseDataNode->addNode(u4ResetNecessaryNode);
 
-        HB::Utils::Opcua::Node *iTargetQuantityNode = new HB::Utils::Opcua::Node("iTargetQuantity", "iTargetQuantity", "OEEenAnalyseData.iTargetQuantity",
-                                                0);
+        HB::Utils::Opcua::Node *iTargetQuantityNode = new HB::Utils::Opcua::Node("iTargetQuantity", "iTargetQuantity",
+                                                                                 "OEEenAnalyseData.iTargetQuantity",
+                                                                                 0);
         oeeEnAnalyseDataNode->addNode(iTargetQuantityNode);
 
-        HB::Utils::Opcua::Node *sWorkOrderIdNode = new HB::Utils::Opcua::Node("sWorkOrderId", "sWorkOrderId", "OEEenAnalyseData.sWorkOrderId",
-                                                "Unset");
+        HB::Utils::Opcua::Node *sWorkOrderIdNode = new HB::Utils::Opcua::Node("sWorkOrderId", "sWorkOrderId",
+                                                                              "OEEenAnalyseData.sWorkOrderId",
+                                                                              "Unset");
         oeeEnAnalyseDataNode->addNode(sWorkOrderIdNode);
 
     }
@@ -188,10 +96,11 @@ namespace HB::Utils::Opcua {
         ///------------------------------------------
         p_Server = new opcua::Server(m_Port);
 
-        if (!m_Hostname.empty()) {
-            p_Server->setCustomHostname(m_Hostname);//else use the pc's hostname
+        if (m_Hostname.empty()) {
+            m_Hostname = "localhost";
         }
 
+        p_Server->setCustomHostname(m_Hostname);//else use the pc's hostname
         p_Server->setApplicationUri("opcua:open62541pp.server.application");
         p_Server->setProductUri("https://open62541pp.github.io");
 
@@ -199,21 +108,6 @@ namespace HB::Utils::Opcua {
         for (auto &node: m_Nodes) {
             addNodeToServer(*node, parentNode);
         }
-
-        for (auto &node: m_Nodes) {
-            addNodeToServer(*node, parentNode);
-        }
-
-        for (auto &node: m_Nodes) {
-            addNodeToServer(*node, parentNode);
-        }
-
-
-
-
-
-
-
 
         ///------------------------------------------
         /// Start the server
@@ -273,25 +167,112 @@ namespace HB::Utils::Opcua {
                 addNodeToServer(*childNode, objectNode);
             }
         } else if (node.type == NodeType::VARIABLE) {
-            opcua::DataTypeId dataTypeId = node.getDataType();
+            int dataTypeId = node.getDataType();
+            auto attributes = opcua::VariableAttributes{
+            }.setDisplayName({OPCUA_LOCALE, node.displayName})
+                    .setDescription({OPCUA_LOCALE, node.nodeId})
+                    .setUserAccessLevel(opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite)
+                    .setAccessLevel(opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite)
+                    .setHistorizing(true);
+
+            switch (dataTypeId) {
+                case UA_TYPES_BOOLEAN:
+                    attributes.setDataType(opcua::DataTypeId::Boolean);
+                    break;
+                case UA_TYPES_INT32:
+                    attributes.setDataType(opcua::DataTypeId::Int32);
+                    break;
+                case UA_TYPES_UINT32:
+                    attributes.setDataType(opcua::DataTypeId::UInt32);
+                    break;
+                case UA_TYPES_INT64:
+                    attributes.setDataType(opcua::DataTypeId::Int64);
+                    break;
+                case UA_TYPES_UINT64:
+                    attributes.setDataType(opcua::DataTypeId::UInt64);
+                    break;
+                case UA_TYPES_FLOAT:
+                    attributes.setDataType(opcua::DataTypeId::Float);
+                    break;
+                case UA_TYPES_STRING:
+                    attributes.setDataType(opcua::DataTypeId::String);
+                    break;
+            }
 
             auto objectNode = parentNode.addVariable(
                     {1, node.nodeId},
                     node.browserName,
-                    opcua::VariableAttributes{
-                    }
-                            .setDisplayName({OPCUA_LOCALE, node.displayName})
-                            .setDescription({OPCUA_LOCALE, node.nodeId})
-                            .setDataType(dataTypeId)
-                            .setUserAccessLevel(opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite)
-                            .setAccessLevel(opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite)
-                            .setHistorizing(true)
+                    attributes
             );
+
+            switch (dataTypeId) {
+                case UA_TYPES_BOOLEAN:
+                    objectNode.writeValueScalar(std::get<bool>(node.defaultValue));
+                    break;
+                case UA_TYPES_INT32:
+                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
+                    break;
+                case UA_TYPES_UINT32:
+                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
+                    break;
+                case UA_TYPES_INT64:
+                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
+                    break;
+                case UA_TYPES_UINT64:
+                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
+                    break;
+                case UA_TYPES_FLOAT:
+                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
+                    break;
+                case UA_TYPES_STRING:
+                    std::string stringVal = std::get<std::string>(node.defaultValue);
+                    opcua::String stringValOpcua;
+                    opcua::TypeConverter<std::string>::toNative(stringVal, stringValOpcua);
+                    objectNode.writeValueScalar(stringValOpcua);
+                    objectNode.writeAccessLevel(
+                            opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite
+                    );
+                    break;
+            }
+            objectNode.writeAccessLevel(
+                    opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite
+            );
+
 
             for (auto childNode: node.childNodes) {
                 addNodeToServer(*childNode, objectNode);
             }
         }
+    }
+
+    bool Server::isRunning() {
+        if (p_Server == nullptr) {
+            return false;
+        }
+
+        return p_Server->isRunning();
+    }
+
+    int Server::getPort() const {
+        return m_Port;
+    }
+
+    u_long Server::getConnectedClientCount() const {
+        if (p_Server == nullptr) {
+            return 0;
+        }
+
+        return p_Server->getSessions().size();
+    }
+
+    std::string Server::getHostname() {
+        if (isRunning()) {
+            auto conf = opcua::detail::getConfig(p_Server->handle());
+            std::string hostnamestr = UAStringToString(conf->customHostname);
+            return hostnamestr;
+        }
+
+        return m_Hostname;
     }
 
 

@@ -9,7 +9,37 @@
 #include "Server.h"
 
 namespace HBUI::Utils::Opcua {
+    struct TreeNode {
+        std::string name; // Display name of the node/leaf
+        std::string path; // The hierarchical path or identifier
+        std::string value; // The value if this is a leaf
+        bool isSelected; // Whether this item is selected
+        std::vector<TreeNode> children; // Children of this node/leaf
+        HB::Utils::Opcua::Node *node;
 
+        // Constructor for a node
+//                TreeNode() : name(""), path(""), value(""), isSelected(false) {}
+
+//                TreeNode(const std::string &nodeName, const std::string &nodePath)
+//                        : name(nodeName), path(nodePath), value(""), isSelected(false) {}
+//
+//                // Constructor for a leaf
+//                TreeNode(const std::string &leafName, const std::string &leafPath, const std::string &leafValue)
+//                        : name(leafName), path(leafPath), value(leafValue), isSelected(false) {}
+
+        // Function to determine if this is a leaf (has value)
+        bool isLeaf() const {
+            return !value.empty();
+        }
+
+        // Function to add a child node
+        void addChild(const TreeNode &child) {
+            children.push_back(child);
+        }
+        void DrawTreeNode(TreeNode &node);
+        void MyComplexTree(TreeNode nodes);
+        TreeNode CreateTreeNodeFromServerNode(HB::Utils::Opcua::Node &serverNode);
+    };
     class ServerManagerWindow {
     public:
         ServerManagerWindow();
@@ -39,12 +69,18 @@ namespace HBUI::Utils::Opcua {
     private:
         const std::string label = "Server Manager";
         HB::Utils::Opcua::Server *p_Server = nullptr;
+        HB::Utils::Opcua::Node *p_SelectedNode = nullptr;
         //inputs
     private:
         std::string hostname = "localhost";
         int port = 4840;
 
 
+        HBUI::Utils::Opcua::TreeNode CreateTreeNodeFromServerNode(HB::Utils::Opcua::Node &serverNode);
+
+        void MyComplexTree(HBUI::Utils::Opcua::TreeNode nodes);
+
+        void DrawTreeNode(TreeNode &node);
     };
 
 } // Opcua
