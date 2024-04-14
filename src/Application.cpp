@@ -44,6 +44,8 @@ namespace HB::Utils {
         serverManagerWindow.begin();
         serverManagerWindow.end();
 
+        HBUI::showLogWindow(&logWindowOpen);
+
         HBUI::endFrame();
     }
     void Application::startOpcuaServer() {

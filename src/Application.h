@@ -23,6 +23,7 @@ namespace HB::Utils {
 
     private:
         HBUI::Utils::Opcua::ServerManagerWindow serverManagerWindow;
+        bool logWindowOpen = true;
     };
 
 } // CamelSnake

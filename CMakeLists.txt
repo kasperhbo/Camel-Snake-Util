@@ -61,28 +61,27 @@ add_subdirectory(vendor)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE vendor_interface)
 
 
-
 ######################################
 # Find and link Cocoa Framework
-find_library(COCOA_LIBRARY Cocoa)
-if(NOT COCOA_LIBRARY)
-    message(FATAL_ERROR "Cocoa not found")
+if (APPLE)
+    find_library(COCOA_LIBRARY Cocoa)
+    if (NOT COCOA_LIBRARY)
+        message(FATAL_ERROR "Cocoa not found")
+    endif ()
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${COCOA_LIBRARY})
 endif()
-target_link_libraries(${CMAKE_PROJECT_NAME}  PRIVATE ${COCOA_LIBRARY})
 
-# Find and link Security Framework
-find_library(SECURITY_LIBRARY Security)
-if(NOT SECURITY_LIBRARY)
-    message(FATAL_ERROR "Security not found")
-endif()
-target_link_libraries(${CMAKE_PROJECT_NAME}  PRIVATE ${SECURITY_LIBRARY})
+if (APPLE)
+    # Find and link Security Framework
+    find_library(SECURITY_LIBRARY Security)
+    if (NOT SECURITY_LIBRARY)
+        message(FATAL_ERROR "Security not found")
+    endif ()
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${SECURITY_LIBRARY})
 
-find_library(LOCAL_AUTHENTICATION_LIBRARY LocalAuthentication)
-if(NOT LOCAL_AUTHENTICATION_LIBRARY)
-    message(FATAL_ERROR "LocalAuthentication not found")
-endif()
-target_link_libraries(${CMAKE_PROJECT_NAME}  PRIVATE ${LOCAL_AUTHENTICATION_LIBRARY})
-
-
-
-
+    find_library(LOCAL_AUTHENTICATION_LIBRARY LocalAuthentication)
+    if (NOT LOCAL_AUTHENTICATION_LIBRARY)
+        message(FATAL_ERROR "LocalAuthentication not found")
+    endif ()
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${LOCAL_AUTHENTICATION_LIBRARY})
+endif (APPLE)

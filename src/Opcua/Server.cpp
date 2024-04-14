@@ -4,79 +4,108 @@
 
 #include "Server.h"
 
+#include <utility>
+#include <HBUI/HBUI.h>
+
 #define OPCUA_LOCALE "en-US"
 
 namespace HB::Utils::Opcua {
 
-    std::string UAStringToString(const UA_String& uaString) {
+    std::string UAStringToString(const UA_String &uaString) {
         // Check if the UA_String is valid
         if (uaString.data == nullptr || uaString.length == 0) {
-            return std::string(); // Return an empty string if UA_String is invalid or empty
+            return {}; // Return an empty string if UA_String is invalid or empty
         }
-
-        // Construct an std::string from the data and length of UA_String
-        return std::string(reinterpret_cast<char*>(uaString.data), uaString.length);
+        return {reinterpret_cast<char *>(uaString.data), uaString.length};
     }
 
-    Server::Server(const std::string &mHostname, int mPort, const std::vector<Node *> &mNodes)
-            : m_Hostname(mHostname), m_Port(mPort),
+    Server::Server(std::string mHostname, int mPort, const std::vector<Node *> &nodes)
+            : m_Hostname(std::move(mHostname)), m_Port(mPort),
               p_Server(nullptr),
-              m_Nodes(mNodes), m_Mutex(), m_Cond(),
+              m_Mutex(), m_Cond(),
               m_ServerThread(), m_RunServer() {
-        HB::Utils::Opcua::Node *root = new HB::Utils::Opcua::Node("DatablocksGlobal", "DatablocksGlobal",
-                                                                  "DatablocksGlobal",
-                                                                  NodeType::OBJECT);
-        m_Nodes.push_back(root);
 
-        HB::Utils::Opcua::Node *oeeEnAnalyseDataNode = new HB::Utils::Opcua::Node("OEEenAnalyseData",
-                                                                                  "OEEenAnalyseData",
-                                                                                  "OEEenAnalyseData",
-                                                                                  NodeType::OBJECT);
-        root->addNode(oeeEnAnalyseDataNode);
+        for (auto node: nodes) {
+            m_Nodes[node->nodeId] = node;
+        }
 
-        HB::Utils::Opcua::Node *u4BatchactiveNode = new HB::Utils::Opcua::Node("U4.bBatchactive", "U4.bBatchactive",
-                                                                               "OEEenAnalyseData.U4.bBatchactive",
-                                                                               false);
-        oeeEnAnalyseDataNode->addNode(u4BatchactiveNode);
+        static std::vector<std::string> boolNodeNames = {
+                "bStateAborted",
+                "bStateAborting",
+                "bStateClearing",
+                "bStateComplete",
+                "bStateCompleting",
+                "bStateExecute",
+                "bStateHeld",
+                "bStateHolding",
+                "bStateldle",
+                "bStateResetting",
+                "bStateStarting",
+                "bStateStopped",
+                "bStateStopping",
+                "bStateSuspended",
+                "bStateSuspending",
+                "bStateUnHolding",
+                "bStateUnsuspending"
+        };
 
-        HB::Utils::Opcua::Node *u4DelayedAutoNode = new HB::Utils::Opcua::Node("U4.bDelayedAuto", "U4.bDelayedAuto",
-                                                                               "OEEenAnalyseData.U4.bDelayedAuto",
-                                                                               false);
-        oeeEnAnalyseDataNode->addNode(u4DelayedAutoNode);
+        //dbpackml
+        {
+            auto root = new HB::Utils::Opcua::Node("dbPackML", "dbPackML", "dbPackML",
+                                                   HB::Utils::Opcua::NodeType::OBJECT);
+            //General
+            {
+                auto rootGeneralNode = new HB::Utils::Opcua::Node("General", "General", "dbPackML.General",
+                                                                  HB::Utils::Opcua::NodeType::OBJECT);
+                {
+                    auto sWorkOrderIdNode = new HB::Utils::Opcua::Node("sWorkOrderId", "sWorkOrderId",
+                                                                       "dbPackML.General.sWorkOrderId",
+                                                                       std::string("Unset"), NodeType::VARIABLE);
+                    rootGeneralNode->addNode(sWorkOrderIdNode);
+                }
+                {
+                    auto iNofAssembliesInBatchNode = new HB::Utils::Opcua::Node("iNofAssembliesInBatch",
+                                                                                "iNofAssembliesInBatch",
+                                                                                "dbPackML.General.iNofAssembliesInThisBatch",
+                                                                                uint16_t(0), NodeType::VARIABLE);
+                    rootGeneralNode->addNode(iNofAssembliesInBatchNode);
+                }
+                {
+                    auto iNofAssembliesInBatchNode = new HB::Utils::Opcua::Node(
+                            "iNofAssembliesProduced", "iNofAssembliesProduced",
+                            "dbPackML.General.iNofAssembliesProduced",
+                            uint16_t(0), NodeType::VARIABLE);
+                    rootGeneralNode->addNode(iNofAssembliesInBatchNode);
+                }
+                root->addNode(rootGeneralNode);
+            }
 
-        HB::Utils::Opcua::Node *u4bInCycleStopNode = new HB::Utils::Opcua::Node("U4.bInCycleStop", "U4.bInCycleStop",
-                                                                                "'OEEenAnalyseData'.U4.bInCycleStop",
-                                                                                false);
-        oeeEnAnalyseDataNode->addNode(u4bInCycleStopNode);
+            //currentstate
+            {
+                auto currentStateRoot = new HB::Utils::Opcua::Node("CurrentState", "CurrentState",
+                                                                   "dbPackML.CurrentState",
+                                                                   HB::Utils::Opcua::NodeType::OBJECT);
+                //all other state
+                {
+                    for (auto &boolNodeName: boolNodeNames) {
+                        auto boolNode = new HB::Utils::Opcua::Node(boolNodeName, boolNodeName,
+                                                                   "dbPackML.CurrentState." + boolNodeName,
+                                                                   false, NodeType::VARIABLE);
+                        currentStateRoot->addNode(boolNode);
+                    }
+                }
 
-        HB::Utils::Opcua::Node *u4bInStopNode = new HB::Utils::Opcua::Node("U4.bInStop", "U4.bInStop",
-                                                                           "OEEenAnalyseData.U4.bInStop",
-                                                                           false);
-        oeeEnAnalyseDataNode->addNode(u4bInStopNode);
-
-        HB::Utils::Opcua::Node *u4ResetNecessaryNode = new HB::Utils::Opcua::Node("U4.bResetNecessary",
-                                                                                  "U4.bResetNecessary",
-                                                                                  "OEEenAnalyseData.U4.bResetNecessary",
-                                                                                  false);
-        oeeEnAnalyseDataNode->addNode(u4ResetNecessaryNode);
-
-        HB::Utils::Opcua::Node *iTargetQuantityNode = new HB::Utils::Opcua::Node("iTargetQuantity", "iTargetQuantity",
-                                                                                 "OEEenAnalyseData.iTargetQuantity",
-                                                                                 0);
-        oeeEnAnalyseDataNode->addNode(iTargetQuantityNode);
-
-        HB::Utils::Opcua::Node *sWorkOrderIdNode = new HB::Utils::Opcua::Node("sWorkOrderId", "sWorkOrderId",
-                                                                              "OEEenAnalyseData.sWorkOrderId",
-                                                                              "Unset");
-        oeeEnAnalyseDataNode->addNode(sWorkOrderIdNode);
-
+                root->addNode(currentStateRoot);
+            }
+            m_Nodes[root->nodeId] = root;
+        }
     }
 
     Server::~Server() {
         stopServer();
 
         for (auto &node: m_Nodes) {
-            delete node;
+            delete node.second;
         }
     }
 
@@ -103,10 +132,27 @@ namespace HB::Utils::Opcua {
         p_Server->setCustomHostname(m_Hostname);//else use the pc's hostname
         p_Server->setApplicationUri("opcua:open62541pp.server.application");
         p_Server->setProductUri("https://open62541pp.github.io");
-
+        p_Server->setLogger([](opcua::LogLevel level, opcua::LogCategory category, std::string_view message) {
+            switch (level) {
+                case opcua::LogLevel::Error:
+                case opcua::LogLevel::Fatal:
+                    HBUI::error(std::string(message));
+                    break;
+                case opcua::LogLevel::Warning:
+                    HBUI::warn(std::string(message));
+                    break;
+                case opcua::LogLevel::Info:
+                case opcua::LogLevel::Trace:
+                    HBUI::log(std::string(message));
+                    break;
+                case opcua::LogLevel::Debug:
+                    HBUI::debug(std::string(message));
+                    break;
+            }
+        });
         opcua::Node<opcua::Server> parentNode = p_Server->getObjectsNode();
         for (auto &node: m_Nodes) {
-            addNodeToServer(*node, parentNode);
+            addNodeToServer(*node.second, parentNode);
         }
 
         ///------------------------------------------
@@ -151,6 +197,14 @@ namespace HB::Utils::Opcua {
 
     void Server::addNodeToServer(const HB::Utils::Opcua::Node &node, opcua::Node<opcua::Server> &parentNode) {
         std::cout << "Trying to add node to server" << std::endl;
+        opcua::AccessLevel accessLevel = opcua::AccessLevel::CurrentRead |
+                                         opcua::AccessLevel::CurrentWrite |
+                                         opcua::AccessLevel::HistoryRead |
+                                         opcua::AccessLevel::HistoryWrite |
+                                         opcua::AccessLevel::SemanticChange |
+                                         opcua::AccessLevel::StatusWrite |
+                                         opcua::AccessLevel::TimestampWrite;
+
         if (p_Server == nullptr) {
             std::cout << "Server is nullptr" << std::endl;
             return;
@@ -171,28 +225,16 @@ namespace HB::Utils::Opcua {
             auto attributes = opcua::VariableAttributes{
             }.setDisplayName({OPCUA_LOCALE, node.displayName})
                     .setDescription({OPCUA_LOCALE, node.nodeId})
-                    .setUserAccessLevel(opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite)
-                    .setAccessLevel(opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite)
+                    .setUserAccessLevel(accessLevel)
+                    .setAccessLevel(accessLevel)
                     .setHistorizing(true);
 
             switch (dataTypeId) {
+                case UA_TYPES_UINT16:
+                    attributes.setDataType(opcua::DataTypeId::UInt16);
+                    break;
                 case UA_TYPES_BOOLEAN:
                     attributes.setDataType(opcua::DataTypeId::Boolean);
-                    break;
-                case UA_TYPES_INT32:
-                    attributes.setDataType(opcua::DataTypeId::Int32);
-                    break;
-                case UA_TYPES_UINT32:
-                    attributes.setDataType(opcua::DataTypeId::UInt32);
-                    break;
-                case UA_TYPES_INT64:
-                    attributes.setDataType(opcua::DataTypeId::Int64);
-                    break;
-                case UA_TYPES_UINT64:
-                    attributes.setDataType(opcua::DataTypeId::UInt64);
-                    break;
-                case UA_TYPES_FLOAT:
-                    attributes.setDataType(opcua::DataTypeId::Float);
                     break;
                 case UA_TYPES_STRING:
                     attributes.setDataType(opcua::DataTypeId::String);
@@ -206,36 +248,47 @@ namespace HB::Utils::Opcua {
             );
 
             switch (dataTypeId) {
-                case UA_TYPES_BOOLEAN:
+                case UA_TYPES_UINT16: {
+                    objectNode.writeValueScalar(std::get<uint16_t>(node.defaultValue));
+                    break;
+                }
+                case UA_TYPES_BOOLEAN: {
                     objectNode.writeValueScalar(std::get<bool>(node.defaultValue));
                     break;
-                case UA_TYPES_INT32:
-                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
-                    break;
-                case UA_TYPES_UINT32:
-                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
-                    break;
-                case UA_TYPES_INT64:
-                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
-                    break;
-                case UA_TYPES_UINT64:
-                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
-                    break;
-                case UA_TYPES_FLOAT:
-                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
-                    break;
-                case UA_TYPES_STRING:
+                }
+                case UA_TYPES_STRING: {
                     std::string stringVal = std::get<std::string>(node.defaultValue);
                     opcua::String stringValOpcua;
                     opcua::TypeConverter<std::string>::toNative(stringVal, stringValOpcua);
                     objectNode.writeValueScalar(stringValOpcua);
-                    objectNode.writeAccessLevel(
-                            opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite
-                    );
                     break;
+                }
+                default: {
+                    std::cout << "Unknown datatype" << std::endl;
+                    break;
+                }
+//                case UA_TYPES_BOOLEAN:
+//                    objectNode.writeValueScalar(std::get<bool>(node.defaultValue));
+//                    break;
+//                case UA_TYPES_INT32:
+//                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
+//                    break;
+//                case UA_TYPES_UINT32:
+//                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
+//                    break;
+//                case UA_TYPES_INT64:
+//                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
+//                    break;
+//                case UA_TYPES_UINT64:
+//                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
+//                    break;
+//                case UA_TYPES_FLOAT:
+//                    objectNode.writeValueScalar(std::get<int>(node.defaultValue));
+//                    break;
+
             }
             objectNode.writeAccessLevel(
-                    opcua::AccessLevel::CurrentRead | opcua::AccessLevel::CurrentWrite
+                    accessLevel
             );
 
 

@@ -17,16 +17,6 @@ namespace HBUI::Utils::Opcua {
         std::vector<TreeNode> children; // Children of this node/leaf
         HB::Utils::Opcua::Node *node;
 
-        // Constructor for a node
-//                TreeNode() : name(""), path(""), value(""), isSelected(false) {}
-
-//                TreeNode(const std::string &nodeName, const std::string &nodePath)
-//                        : name(nodeName), path(nodePath), value(""), isSelected(false) {}
-//
-//                // Constructor for a leaf
-//                TreeNode(const std::string &leafName, const std::string &leafPath, const std::string &leafValue)
-//                        : name(leafName), path(leafPath), value(leafValue), isSelected(false) {}
-
         // Function to determine if this is a leaf (has value)
         bool isLeaf() const {
             return !value.empty();
@@ -36,9 +26,6 @@ namespace HBUI::Utils::Opcua {
         void addChild(const TreeNode &child) {
             children.push_back(child);
         }
-        void DrawTreeNode(TreeNode &node);
-        void MyComplexTree(TreeNode nodes);
-        TreeNode CreateTreeNodeFromServerNode(HB::Utils::Opcua::Node &serverNode);
     };
     class ServerManagerWindow {
     public:
@@ -58,12 +45,12 @@ namespace HBUI::Utils::Opcua {
         void addNode(HB::Utils::Opcua::Node *node);
 
         HB::Utils::Opcua::Node *addVariableNode(std::string name, std::string displayName, std::string description,
-                                                std::variant<int, bool, std::string> defaultValue);
+                                                std::variant<uint16_t, bool, std::string> defaultValue);
 
         HB::Utils::Opcua::Node *addObjectNode(std::string name, std::string displayName, std::string description);
 
         HB::Utils::Opcua::Node *addVariableNode(std::string name, std::string displayName, std::string description,
-                                                std::variant<int, bool, std::string> defaultValue,
+                                                std::variant<uint16_t, bool, std::string> defaultValue,
                                                 HB::Utils::Opcua::Node *parentNode);
 
     private:
@@ -82,7 +69,6 @@ namespace HBUI::Utils::Opcua {
 
         void DrawTreeNode(TreeNode &node);
     };
-
 } // Opcua
 // Utils
 // HBUI

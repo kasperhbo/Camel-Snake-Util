@@ -18,51 +18,67 @@ namespace HB::Utils::Opcua {
     };
 
     struct Node {
+        using MyVariant = std::variant<uint16_t, bool, std::string>;
+
+        enum class MyVariantType {
+            uint16, boolean, string
+        };
+
+        template<MyVariantType Type, typename T>
+        struct is_variant_type : std::false_type {
+        };
+
+        template<>
+        struct is_variant_type<MyVariantType::uint16, uint16_t> : std::true_type {
+        };
+        template<>
+        struct is_variant_type<MyVariantType::boolean, bool> : std::true_type {
+        };
+        template<>
+        struct is_variant_type<MyVariantType::string, std::string> : std::true_type {
+        };
+
+        template<MyVariantType VT>
+        bool check_variant_type(const MyVariant &myvar) const {
+            return std::visit([&](const auto &arg) {
+                return is_variant_type<VT, std::decay_t<decltype(arg)>>::value;
+            }, myvar);
+        }
+
         std::string displayName;
         std::string browserName;
         std::string nodeId;
 
-        std::variant<int, bool, std::string> defaultValue;
+        MyVariant defaultValue = {};
         std::vector<Node *> childNodes = {};
         NodeType type = NodeType::OBJECT;
 
         Node(std::string displayName, std::string browserName, std::string nodeId, NodeType type)
-            : displayName(std::move(displayName)), browserName(std::move(browserName)), nodeId(std::move(nodeId)), type(type) {}
+                : displayName(std::move(displayName)), browserName(std::move(browserName)), nodeId(std::move(nodeId)),
+                  type(type) {}
 
-        Node(std::string displayName, std::string browserName, std::string nodeId,  std::variant<int, bool, std::string> defaultValue)
-                : displayName(std::move(displayName)), browserName(std::move(browserName)), nodeId(std::move(nodeId)), type(NodeType::VARIABLE), defaultValue(std::move(defaultValue)) {}
+        Node(std::string displayName, std::string browserName, std::string nodeId, MyVariant defaultValue,
+             NodeType type)
+                : displayName(std::move(displayName)), browserName(std::move(browserName)), nodeId(std::move(nodeId)),
+                  defaultValue(std::move(defaultValue)), type(type) {
 
-        Node(std::string displayName, std::string browserName, std::string nodeId,
-             const std::variant<int, bool, std::string> &defaultValue, const std::vector<Node *> &childNodes,
-             NodeType type
-        ) : displayName(std::move(displayName)), browserName(std::move(browserName)),
-            nodeId(std::move(nodeId)),
-            defaultValue(defaultValue), childNodes(childNodes), type(type) {}
-
-
-        Node(std::string displayName, std::string browserName, std::string nodeId,
-             const std::variant<int, bool, std::string> &defaultValue, NodeType type
-        ) : displayName(std::move(displayName)), browserName(std::move(browserName)),
-            nodeId(std::move(nodeId)),
-            defaultValue(defaultValue), type(type) {}
-
+        }
 
         void addNode(Node *node) {
             this->childNodes.emplace_back(node);
         }
 
-        [[nodiscard]]int getDataType() const {
-
-            switch (defaultValue.index()) {
-                case 0:
-                    return UA_TYPES_INT32;
-                case 1:
-                    return UA_TYPES_BOOLEAN;
-                case 2:
-                    return UA_TYPES_STRING;
+        int getDataType() const {
+            if (check_variant_type<MyVariantType::uint16>(defaultValue)) {
+                return UA_TYPES_UINT16;
+            } else if (check_variant_type<MyVariantType::boolean>(defaultValue)) {
+                return UA_TYPES_BOOLEAN;
+            } else if (check_variant_type<MyVariantType::string>(defaultValue)) {
+                return UA_TYPES_STRING;
+            } else {
+                UA_assert(false && "Value type is not set");
             }
             assert(!defaultValue.index() && "Value type is not set");
-            return UA_TYPES_VARIANT;
         }
 
         ~Node() {
@@ -78,7 +94,7 @@ namespace HB::Utils::Opcua {
 
         Server(const std::string &hostname, int port) : Server(hostname, port, {}) {}
 
-        Server(const std::string &mHostname, int mPort, const std::vector<Node *> &mNodes);
+        Server(std::string mHostname, int mPort, const std::vector<Node *> &mNodes);
 
         ~Server();
 
@@ -92,7 +108,7 @@ namespace HB::Utils::Opcua {
 
     public:
         void addNode(Node *node) {
-            m_Nodes.emplace_back(node);
+            m_Nodes[node->nodeId] = node;
         }
 
         void startServer();
@@ -101,7 +117,12 @@ namespace HB::Utils::Opcua {
 
     public:
         std::vector<Node *> getNodes() {
-            return m_Nodes;
+            std::vector<Node *> nodes;
+            nodes.reserve(m_Nodes.size());
+            for (auto &node: m_Nodes) {
+                nodes.push_back(node.second);
+            }
+            return nodes;
         }
 
     private:
@@ -114,7 +135,7 @@ namespace HB::Utils::Opcua {
 
     private:
         opcua::Server *p_Server = nullptr;
-        std::vector<Node *> m_Nodes = {};
+        std::unordered_map<std::string, Node *> m_Nodes = {};
 
         std::mutex m_Mutex;             // Mutex to protect shared resources
         std::condition_variable m_Cond; // Condition variable for synchronization
