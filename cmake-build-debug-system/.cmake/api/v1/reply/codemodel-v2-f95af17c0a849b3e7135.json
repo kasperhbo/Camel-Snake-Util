@@ -1,0 +1,763 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "vendor",
+					"childIndexes" : 
+					[
+						2,
+						13
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-vendor-Debug-650fd368ad88650ee272.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "vendor"
+				},
+				{
+					"build" : "vendor/open62541pp",
+					"childIndexes" : 
+					[
+						3
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-vendor.open62541pp-Debug-42f22c6cf981bf3a5fca.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "vendor/open62541pp",
+					"targetIndexes" : 
+					[
+						22
+					]
+				},
+				{
+					"build" : "vendor/open62541pp/3rdparty/open62541",
+					"childIndexes" : 
+					[
+						4,
+						11,
+						12
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-vendor.open62541pp.3rdparty.open62541-Debug-8a96a5d501cbb2b0028a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 2,
+					"source" : "vendor/open62541pp/3rdparty/open62541",
+					"targetIndexes" : 
+					[
+						4,
+						5,
+						6,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21
+					]
+				},
+				{
+					"build" : "vendor/open62541pp/3rdparty/open62541/arch",
+					"childIndexes" : 
+					[
+						5,
+						6,
+						7,
+						8,
+						9,
+						10
+					],
+					"jsonFile" : "directory-vendor.open62541pp.3rdparty.open62541.arch-Debug-54f71e0029f2e0bcd87a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 2,
+					"source" : "vendor/open62541pp/3rdparty/open62541/arch"
+				},
+				{
+					"build" : "vendor/open62541pp/3rdparty/open62541/arch/posix",
+					"jsonFile" : "directory-vendor.open62541pp.3rdparty.open62541.arch.posix-Debug-8e6598870eff60a47c9e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 2,
+					"source" : "vendor/open62541pp/3rdparty/open62541/arch/posix"
+				},
+				{
+					"build" : "vendor/open62541pp/3rdparty/open62541/arch/win32",
+					"jsonFile" : "directory-vendor.open62541pp.3rdparty.open62541.arch.win32-Debug-c00a6f5b68e2846f2c5b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 2,
+					"source" : "vendor/open62541pp/3rdparty/open62541/arch/win32"
+				},
+				{
+					"build" : "vendor/open62541pp/3rdparty/open62541/arch/freertosLWIP",
+					"jsonFile" : "directory-vendor.open62541pp.3rdparty.open62541.arch.freertosLWIP-Debug-050b5e69418061c436cd.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 2,
+					"source" : "vendor/open62541pp/3rdparty/open62541/arch/freertosLWIP"
+				},
+				{
+					"build" : "vendor/open62541pp/3rdparty/open62541/arch/vxworks",
+					"jsonFile" : "directory-vendor.open62541pp.3rdparty.open62541.arch.vxworks-Debug-2723a63e274eacf69a96.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 2,
+					"source" : "vendor/open62541pp/3rdparty/open62541/arch/vxworks"
+				},
+				{
+					"build" : "vendor/open62541pp/3rdparty/open62541/arch/eCos",
+					"jsonFile" : "directory-vendor.open62541pp.3rdparty.open62541.arch.eCos-Debug-1907ae793919d4bc8a24.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 2,
+					"source" : "vendor/open62541pp/3rdparty/open62541/arch/eCos"
+				},
+				{
+					"build" : "vendor/open62541pp/3rdparty/open62541/arch/wec7",
+					"jsonFile" : "directory-vendor.open62541pp.3rdparty.open62541.arch.wec7-Debug-473812d023037653a77e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 2,
+					"source" : "vendor/open62541pp/3rdparty/open62541/arch/wec7"
+				},
+				{
+					"build" : "vendor/open62541pp/3rdparty/open62541/doc",
+					"jsonFile" : "directory-vendor.open62541pp.3rdparty.open62541.doc-Debug-31248ed276a56deee412.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 2,
+					"source" : "vendor/open62541pp/3rdparty/open62541/doc",
+					"targetIndexes" : 
+					[
+						7,
+						8,
+						9
+					]
+				},
+				{
+					"build" : "vendor/open62541pp/3rdparty/open62541/tools/packaging",
+					"jsonFile" : "directory-vendor.open62541pp.3rdparty.open62541.tools.packaging-Debug-773685c8d0a0aae666d7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 2,
+					"source" : "vendor/open62541pp/3rdparty/open62541/tools/packaging"
+				},
+				{
+					"build" : "vendor/imgui",
+					"childIndexes" : 
+					[
+						14,
+						22
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-vendor.imgui-Debug-fc52280bdf22a6fe8f00.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 3,
+					"source" : "vendor/imgui",
+					"targetIndexes" : 
+					[
+						12
+					]
+				},
+				{
+					"build" : "vendor/imgui/HBUI",
+					"childIndexes" : 
+					[
+						15,
+						18
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-vendor.imgui.HBUI-Debug-5459d07812907d450067.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.27.8"
+					},
+					"parentIndex" : 13,
+					"projectIndex" : 4,
+					"source" : "vendor/imgui/HBUI",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "ImVK",
+					"childIndexes" : 
+					[
+						16
+					],
+					"jsonFile" : "directory-ImVK-Debug-d867b9d265b719957d67.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.27.8"
+					},
+					"parentIndex" : 14,
+					"projectIndex" : 5,
+					"source" : "vendor/imgui/ImVK",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "ImVK/glfw",
+					"childIndexes" : 
+					[
+						17
+					],
+					"jsonFile" : "directory-ImVK.glfw-Debug-ef3e20b87bf35396cd86.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 15,
+					"projectIndex" : 6,
+					"source" : "vendor/glfw"
+				},
+				{
+					"build" : "ImVK/glfw/src",
+					"jsonFile" : "directory-ImVK.glfw.src-Debug-8d1c84b354ab95934233.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 16,
+					"projectIndex" : 6,
+					"source" : "vendor/glfw/src",
+					"targetIndexes" : 
+					[
+						11,
+						24
+					]
+				},
+				{
+					"build" : "vendor/imgui/HBUI/vendor",
+					"childIndexes" : 
+					[
+						19,
+						20,
+						21
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-vendor.imgui.HBUI.vendor-Debug-69928686576cb65b8ffd.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.27.8"
+					},
+					"parentIndex" : 14,
+					"projectIndex" : 7,
+					"source" : "vendor/imgui/HBUI/vendor"
+				},
+				{
+					"build" : "vendor/imgui/HBUI/vendor/magic_enum",
+					"jsonFile" : "directory-vendor.imgui.HBUI.vendor.magic_enum-Debug-a8560bf8fac6550ab635.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 18,
+					"projectIndex" : 8,
+					"source" : "vendor/imgui/HBUI/vendor/magic_enum"
+				},
+				{
+					"build" : "vendor/imgui/HBUI/vendor/fmt",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-vendor.imgui.HBUI.vendor.fmt-Debug-2f01298940eff532f8e7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 18,
+					"projectIndex" : 9,
+					"source" : "vendor/imgui/HBUI/vendor/fmt",
+					"targetIndexes" : 
+					[
+						10
+					]
+				},
+				{
+					"build" : "vendor/imgui/HBUI/vendor/spdlog",
+					"jsonFile" : "directory-vendor.imgui.HBUI.vendor.spdlog-Debug-6d5c4e5ef4e0268a3dfb.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.11"
+					},
+					"parentIndex" : 18,
+					"projectIndex" : 10,
+					"source" : "vendor/imgui/HBUI/vendor/spdlog",
+					"targetIndexes" : 
+					[
+						23
+					]
+				},
+				{
+					"build" : "example",
+					"jsonFile" : "directory-example-Debug-5b17952679af283ce6d7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 13,
+					"projectIndex" : 11,
+					"source" : "vendor/imgui/example",
+					"targetIndexes" : 
+					[
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						3
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "CamelSnakeUtil",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						2
+					],
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "open62541++",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						22
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12
+					],
+					"name" : "open62541",
+					"parentIndex" : 1,
+					"targetIndexes" : 
+					[
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						4,
+						11
+					],
+					"directoryIndexes" : 
+					[
+						13
+					],
+					"name" : "imgui",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						12
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						5,
+						7
+					],
+					"directoryIndexes" : 
+					[
+						14
+					],
+					"name" : "HBUI",
+					"parentIndex" : 3,
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						6
+					],
+					"directoryIndexes" : 
+					[
+						15
+					],
+					"name" : "ImVk",
+					"parentIndex" : 4,
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						16,
+						17
+					],
+					"name" : "GLFW",
+					"parentIndex" : 5,
+					"targetIndexes" : 
+					[
+						11,
+						24
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						8,
+						9,
+						10
+					],
+					"directoryIndexes" : 
+					[
+						18
+					],
+					"name" : "HBUI_VENDOR",
+					"parentIndex" : 4
+				},
+				{
+					"directoryIndexes" : 
+					[
+						19
+					],
+					"name" : "magic_enum",
+					"parentIndex" : 7
+				},
+				{
+					"directoryIndexes" : 
+					[
+						20
+					],
+					"name" : "FMT",
+					"parentIndex" : 7,
+					"targetIndexes" : 
+					[
+						10
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						21
+					],
+					"name" : "spdlog",
+					"parentIndex" : 7,
+					"targetIndexes" : 
+					[
+						23
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						22
+					],
+					"name" : "ImVk-example",
+					"parentIndex" : 3,
+					"targetIndexes" : 
+					[
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "CamelSnakeUtil::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CamelSnakeUtil-Debug-37f3ab734051e9d629df.json",
+					"name" : "CamelSnakeUtil",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 14,
+					"id" : "HBUI::@9186a67ddf0a40c967d3",
+					"jsonFile" : "target-HBUI-Debug-cadc6da85a00da1279e7.json",
+					"name" : "HBUI",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 15,
+					"id" : "ImVk::@70c7870b202094114e33",
+					"jsonFile" : "target-ImVk-Debug-9e5cce986fd2360bd776.json",
+					"name" : "ImVk",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 22,
+					"id" : "ImVk-example::@70983d692f648185febe",
+					"jsonFile" : "target-ImVk-example-Debug-6db47f63dfa0aaa3b6ae.json",
+					"name" : "ImVk-example",
+					"projectIndex" : 11
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "clang-format::@8c1ecb3c74ade6c13533",
+					"jsonFile" : "target-clang-format-Debug-6810493ab4e68ab8c8bd.json",
+					"name" : "clang-format",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "clang-tidy::@8c1ecb3c74ade6c13533",
+					"jsonFile" : "target-clang-tidy-Debug-0e506fe3b52bc865691f.json",
+					"name" : "clang-tidy",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "cpplint::@8c1ecb3c74ade6c13533",
+					"jsonFile" : "target-cpplint-Debug-a723adfa505f0215d9d7.json",
+					"name" : "cpplint",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "doc::@5d6a1f65423bec4578d5",
+					"jsonFile" : "target-doc-Debug-375c5fd7aee8bc0caaeb.json",
+					"name" : "doc",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "doc_latex::@5d6a1f65423bec4578d5",
+					"jsonFile" : "target-doc_latex-Debug-02375f7f9c43b758b60b.json",
+					"name" : "doc_latex",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "doc_pdf::@5d6a1f65423bec4578d5",
+					"jsonFile" : "target-doc_pdf-Debug-d1cd76659dd154a11163.json",
+					"name" : "doc_pdf",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 20,
+					"id" : "fmt::@d8eaca3f5b68f92502e4",
+					"jsonFile" : "target-fmt-Debug-29a6efbf967ec6dc56ef.json",
+					"name" : "fmt",
+					"projectIndex" : 9
+				},
+				{
+					"directoryIndex" : 17,
+					"id" : "glfw::@fbea2b41f92b1aed9cae",
+					"jsonFile" : "target-glfw-Debug-aebefd8f8104a2e2d7f3.json",
+					"name" : "glfw",
+					"projectIndex" : 6
+				},
+				{
+					"directoryIndex" : 13,
+					"id" : "imgui::@3edc7d76825c910d4a8d",
+					"jsonFile" : "target-imgui-Debug-b0a2c0296bf6ef28a86b.json",
+					"name" : "imgui",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "open62541::@8c1ecb3c74ade6c13533",
+					"jsonFile" : "target-open62541-Debug-2b12bae47cb4328323e2.json",
+					"name" : "open62541",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "open62541-code-generation::@8c1ecb3c74ade6c13533",
+					"jsonFile" : "target-open62541-code-generation-Debug-8cdb247f47581977c272.json",
+					"name" : "open62541-code-generation",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "open62541-generator-ids-ns0::@8c1ecb3c74ade6c13533",
+					"jsonFile" : "target-open62541-generator-ids-ns0-Debug-64335fd8fc8a401d45d0.json",
+					"name" : "open62541-generator-ids-ns0",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "open62541-generator-namespace::@8c1ecb3c74ade6c13533",
+					"jsonFile" : "target-open62541-generator-namespace-Debug-431b30e3b06b51d5218b.json",
+					"name" : "open62541-generator-namespace",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "open62541-generator-statuscode::@8c1ecb3c74ade6c13533",
+					"jsonFile" : "target-open62541-generator-statuscode-Debug-901bd106956d5d3c8579.json",
+					"name" : "open62541-generator-statuscode",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "open62541-generator-transport::@8c1ecb3c74ade6c13533",
+					"jsonFile" : "target-open62541-generator-transport-Debug-bba0024502a703bf77e1.json",
+					"name" : "open62541-generator-transport",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "open62541-generator-types::@8c1ecb3c74ade6c13533",
+					"jsonFile" : "target-open62541-generator-types-Debug-cce8576c814b1fbc87db.json",
+					"name" : "open62541-generator-types",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "open62541-object::@8c1ecb3c74ade6c13533",
+					"jsonFile" : "target-open62541-object-Debug-af2eae0ec32049f9f4ac.json",
+					"name" : "open62541-object",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "open62541-plugins::@8c1ecb3c74ade6c13533",
+					"jsonFile" : "target-open62541-plugins-Debug-64476b5ebcf452c00650.json",
+					"name" : "open62541-plugins",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "open62541pp::@738e45eb5854730dc94e",
+					"jsonFile" : "target-open62541pp-Debug-52a3ce3eef7e3ebed682.json",
+					"name" : "open62541pp",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 21,
+					"id" : "spdlog::@39f2405807fc631c94da",
+					"jsonFile" : "target-spdlog-Debug-f26120aa2ef7c341a621.json",
+					"name" : "spdlog",
+					"projectIndex" : 10
+				},
+				{
+					"directoryIndex" : 17,
+					"id" : "update_mappings::@fbea2b41f92b1aed9cae",
+					"jsonFile" : "target-update_mappings-Debug-b97bcbe5031c345f3bfb.json",
+					"name" : "update_mappings",
+					"projectIndex" : 6
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/brk/_private/repos/utils/Camel-Snake-Util/cmake-build-debug-system",
+		"source" : "/Users/brk/_private/repos/utils/Camel-Snake-Util"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

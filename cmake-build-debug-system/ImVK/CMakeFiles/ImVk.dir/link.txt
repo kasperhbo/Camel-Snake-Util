@@ -1,0 +1,2 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc ../bin/libImVk.a CMakeFiles/ImVk.dir/backends/imgui_impl_glfw.cpp.o CMakeFiles/ImVk.dir/backends/imgui_impl_vulkan.cpp.o CMakeFiles/ImVk.dir/private/src/ImVk.cpp.o CMakeFiles/ImVk.dir/private/src/Image.cpp.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib ../bin/libImVk.a

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "vendor/open62541pp/3rdparty/open62541/tools/packaging",
+		"source" : "vendor/open62541pp/3rdparty/open62541/tools/packaging"
+	}
+}

@@ -1,0 +1,105 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"vendor/open62541pp/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 177,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 182,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 188,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 207,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"bin/libopen62541pp.a"
+			],
+			"targetId" : "open62541pp::@738e45eb5854730dc94e",
+			"targetIndex" : 22,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				{
+					"from" : "vendor/open62541pp/include",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/open62541pp",
+			"exportName" : "open62541ppTargets",
+			"exportTargets" : 
+			[
+				{
+					"id" : "open62541pp::@738e45eb5854730dc94e",
+					"index" : 22
+				}
+			],
+			"paths" : 
+			[
+				"vendor/open62541pp/CMakeFiles/Export/03b9fc2ae6b64ffed0f1b3f57de0c680/open62541ppTargets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/open62541pp",
+			"paths" : 
+			[
+				"cmake-build-debug-system/open62541ppConfigVersion.cmake",
+				"cmake-build-debug-system/open62541ppConfig.cmake"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "vendor/open62541pp",
+		"source" : "vendor/open62541pp"
+	}
+}

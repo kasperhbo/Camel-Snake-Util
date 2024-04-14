@@ -1,0 +1,128 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"vendor/imgui/HBUI/vendor/fmt/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 392,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 404,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 407,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 410,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"bin/libfmtd.a"
+			],
+			"targetId" : "fmt::@d8eaca3f5b68f92502e4",
+			"targetIndex" : 10,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "include/fmt",
+			"paths" : 
+			[
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/args.h",
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/chrono.h",
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/color.h",
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/compile.h",
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/core.h",
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/format.h",
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/format-inl.h",
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/os.h",
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/ostream.h",
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/printf.h",
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/ranges.h",
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/std.h",
+				"vendor/imgui/HBUI/vendor/fmt/include/fmt/xchar.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/fmt",
+			"paths" : 
+			[
+				"cmake-build-debug-system/vendor/imgui/HBUI/vendor/fmt/fmt-config.cmake",
+				"cmake-build-debug-system/vendor/imgui/HBUI/vendor/fmt/fmt-config-version.cmake"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/fmt",
+			"exportName" : "fmt-targets",
+			"exportTargets" : 
+			[
+				{
+					"id" : "fmt::@d8eaca3f5b68f92502e4",
+					"index" : 10
+				},
+				{
+					"id" : "fmt-header-only::@d8eaca3f5b68f92502e4",
+					"index" : 0
+				}
+			],
+			"paths" : 
+			[
+				"vendor/imgui/HBUI/vendor/fmt/CMakeFiles/Export/b834597d9b1628ff12ae4314c3a2e4b8/fmt-targets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "lib/pkgconfig",
+			"paths" : 
+			[
+				"cmake-build-debug-system/vendor/imgui/HBUI/vendor/fmt/fmt.pc"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "vendor/imgui/HBUI/vendor/fmt",
+		"source" : "vendor/imgui/HBUI/vendor/fmt"
+	}
+}

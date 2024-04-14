@@ -1,0 +1,50 @@
+/Users/brk/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DSPDLOG_FMT_EXTERNAL:BOOL=ON -S /Users/brk/_private/repos/utils/Camel-Snake-Util -B /Users/brk/_private/repos/utils/Camel-Snake-Util/cmake-build-debug-system
+-- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- CMAKE_PROJECT_NAME: CamelSnakeUtil
+-- vendProjName: CamelSnakeUtil-VENDOR
+-- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- CMAKE_PROJECT_NAME: CamelSnakeUtil
+-- vendProjName: CamelSnakeUtil-VENDOR
+-- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- open62541 Version: v1.3.9
+-- The selected architecture is: posix
+-- Could NOT find Sphinx (missing: SPHINX_EXECUTABLE) 
+-- Could NOT find LATEX (missing: LATEX_COMPILER) 
+-- IPO not enabled
+-- IMGUI_DIR: /Users/brk/_private/repos/utils/Camel-Snake-Util/vendor/imgui
+-- sources: /Users/brk/_private/repos/utils/Camel-Snake-Util/vendor/imgui/imgui.cpp;/Users/brk/_private/repos/utils/Camel-Snake-Util/vendor/imgui/imgui_demo.cpp;/Users/brk/_private/repos/utils/Camel-Snake-Util/vendor/imgui/imgui_draw.cpp;/Users/brk/_private/repos/utils/Camel-Snake-Util/vendor/imgui/imgui_tables.cpp;/Users/brk/_private/repos/utils/Camel-Snake-Util/vendor/imgui/imgui_widgets.cpp
+-- GENERATED_SOURCES: /Users/brk/_private/repos/utils/Camel-Snake-Util/vendor/imgui/HBUI/include/HBUI/fonts/Headers/Fonts.h
+-- CMAKE_CURRENT_BINARY_DIR: /Users/brk/_private/repos/utils/Camel-Snake-Util/cmake-build-debug-system/vendor/imgui/HBUI
+CMake Warning at vendor/imgui/ImVK/CMakeLists.txt:66 (message):
+  The GLFW submodule was not found.  Downloading GLFW from github.
+
+
+fatal: destination path '../../glfw' already exists and is not an empty directory.
+-- Including Cocoa support
+-- CMAKE_BUILD_TYPE: Debug
+-- CMAKE_CXX_STANDARD: 17
+-- CMAKE_CXX_FLAGS:  -Wno-unused-parameter -w -Wunused-parameter
+-- CMAKE_RUNTIME_OUTPUT_DIRECTORY: /Users/brk/_private/repos/utils/Camel-Snake-Util/cmake-build-debug-system/bin
+-- CMAKE_LIBRARY_OUTPUT_DIRECTORY: /Users/brk/_private/repos/utils/Camel-Snake-Util/cmake-build-debug-system/bin
+-- CMAKE_ARCHIVE_OUTPUT_DIRECTORY: /Users/brk/_private/repos/utils/Camel-Snake-Util/cmake-build-debug-system/bin
+-- CMAKE_CURRENT_SOURCE_DIR: /Users/brk/_private/repos/utils/Camel-Snake-Util/vendor/imgui/ImVK
+-- Version: 10.1.2
+-- Build type: Debug
+-- spdlog folder found
+-- Build spdlog: 1.12.0
+-- Build type: Debug
+-- HBUI_VENDOR: CamelSnakeUtil
+-- HBUI_VENDOR: CamelSnakeUtil 
+-- HBUI_VENDOR: CamelSnakeUtil  17
+-- HBUI_VENDOR: CamelSnakeUtil  17 ON
+-- HBUI_VENDOR: HBUI_MAGIC_ENUM: 
+-- CMAKEPROJECT NAME: CamelSnakeUtil
+-- CMAKE_CXX_FLAGS:  -fsanitize=address -g -fsanitize=leak -g
+-- CMAKE_CXX_FLAGS: 
+-- Configuring done (0.3s)
+-- Generating done (0.1s)
+-- Build files have been written to: /Users/brk/_private/repos/utils/Camel-Snake-Util/cmake-build-debug-system
+
+Problems were encountered while collecting compiler information:
+	clang: error: unsupported option '-fsanitize=leak' for target 'arm64-apple-darwin23.4.0'
