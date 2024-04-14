@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.12)
-project(CamelSnakeUtil LANGUAGES CXX C OBJC OBJCXX)
+project(CamelSnakeUtil LANGUAGES CXX C)
+
+if(APPLE)
+#    OBJC OBJCXX)
+    enable_language(OBJC)
+    enable_language(OBJCXX)
+endif()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
