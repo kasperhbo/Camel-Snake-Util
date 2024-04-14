@@ -44,7 +44,7 @@ namespace HB::Utils {
         serverManagerWindow.begin();
         serverManagerWindow.end();
 
-        HBUI::showLogWindow(&logWindowOpen);
+//        HBUI::showLogWindow(&logWindowOpen);
 
         HBUI::endFrame();
     }
