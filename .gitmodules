@@ -5,6 +5,3 @@
 	path = vendor/imgui
 	url = https://github.com/KaspersTools/imgui.git
 	branch = feature/MainUIElements
-
-mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DSPDLOG_FMT_EXTERNAL:BOOL=ON ..
-cmake --build .. --target CamelSnakeUtil -- -j 12
